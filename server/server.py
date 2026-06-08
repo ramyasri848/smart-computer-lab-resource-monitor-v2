@@ -1,7 +1,9 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 from server.database import (
-    create_database
+    create_database,
+    insert_system_data
 )
 
 app = FastAPI()
@@ -11,6 +13,19 @@ app = FastAPI()
 def startup():
 
     create_database()
+
+
+class SystemData(BaseModel):
+
+    machine_name: str
+
+    cpu_usage: float
+
+    ram_usage: float
+
+    disk_usage: float
+
+    process_count: int
 
 
 @app.get("/")
@@ -27,4 +42,23 @@ def health():
 
     return {
         "status": "healthy"
+    }
+
+
+@app.post("/submit-data")
+def submit_data(
+    data: SystemData
+):
+
+    insert_system_data(
+        data.machine_name,
+        data.cpu_usage,
+        data.ram_usage,
+        data.disk_usage,
+        data.process_count
+    )
+
+    return {
+        "message":
+        "Data stored successfully"
     }
