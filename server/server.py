@@ -12,6 +12,19 @@ from server.database import (
 app = FastAPI()
 
 
+def format_machine(row):
+
+    return {
+        "id": row[0],
+        "machine_name": row[1],
+        "timestamp": row[2],
+        "cpu_usage": row[3],
+        "ram_usage": row[4],
+        "disk_usage": row[5],
+        "process_count": row[6]
+    }
+
+
 @app.on_event("startup")
 def startup():
 
@@ -73,21 +86,37 @@ def get_machines():
     data = get_all_system_data()
 
     return {
-        "machines": data
+        "machines": [
+            format_machine(row)
+            for row in data
+        ]
     }
+
+
 @app.get("/latest")
 def get_latest():
 
     data = get_latest_system_data()
 
+    if not data:
+
+        return {
+            "latest": None
+        }
+
     return {
-        "latest": data
+        "latest": format_machine(data)
     }
+
+
 @app.get("/machines/latest")
 def latest_machines():
 
     data = get_latest_machines()
 
     return {
-        "machines": data
+        "machines": [
+            format_machine(row)
+            for row in data
+        ]
     }
