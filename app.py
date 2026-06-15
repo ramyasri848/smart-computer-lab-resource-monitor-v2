@@ -20,6 +20,11 @@ from report_generator import (
 )
 import os
 from background_monitor import start_monitoring
+from api_client import (
+    get_summary,
+    get_latest_machines,
+    get_critical_machines
+)
 def show_live_graphs():
 
     try:
@@ -94,6 +99,7 @@ menu = st.sidebar.radio(
     "Select Module",
     [
         "Dashboard",
+        "Central Dashboard",
         "CPU Monitor",
         "Memory Monitor",
         "Disk Monitor",
@@ -151,7 +157,66 @@ if menu == "Dashboard":
         st.divider()
 
         show_live_graphs()
+        #Central Dashboard
+elif menu == "Central Dashboard":
 
+    st.header(
+        "Central Monitoring Dashboard"
+    )
+
+    summary = get_summary()
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric(
+            "Machines",
+            summary["total_machines"]
+        )
+
+    with col2:
+        st.metric(
+            "Avg CPU",
+            f"{summary['average_cpu_usage']}%"
+        )
+
+    with col3:
+        st.metric(
+            "Avg RAM",
+            f"{summary['average_ram_usage']}%"
+        )
+
+    with col4:
+        st.metric(
+            "Avg Disk",
+            f"{summary['average_disk_usage']}%"
+        )
+
+    st.divider()
+
+    st.subheader(
+        "Latest Machine Status"
+    )
+
+    latest = get_latest_machines()
+
+    st.dataframe(
+        latest["machines"],
+        width="stretch"
+    )
+
+    st.divider()
+
+    st.subheader(
+        "Machines Requiring Attention"
+    )
+
+    critical = get_critical_machines()
+
+    st.dataframe(
+        critical["critical_machines"],
+        width="stretch"
+    )
 # Memory Monitor
 elif menu == "Memory Monitor":
     st.header("Memory Monitor")
