@@ -4,7 +4,8 @@ from pydantic import BaseModel
 from server.database import (
     create_database,
     insert_system_data,
-    get_all_system_data
+    get_all_system_data,
+    get_latest_system_data
 )
 
 app = FastAPI()
@@ -72,4 +73,12 @@ def get_machines():
 
     return {
         "machines": data
+    }
+@app.get("/latest")
+def get_latest():
+
+    data = get_latest_system_data()
+
+    return {
+        "latest": data
     }

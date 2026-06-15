@@ -97,3 +97,25 @@ def get_all_system_data():
     connection.close()
 
     return data
+def get_latest_system_data():
+
+    connection = sqlite3.connect(
+        DATABASE
+    )
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM system_data
+        ORDER BY id DESC
+        LIMIT 1
+        """
+    )
+
+    data = cursor.fetchone()
+
+    connection.close()
+
+    return data
