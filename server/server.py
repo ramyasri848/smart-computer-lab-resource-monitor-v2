@@ -5,7 +5,8 @@ from server.database import (
     create_database,
     insert_system_data,
     get_all_system_data,
-    get_latest_system_data
+    get_latest_system_data,
+    get_latest_machines
 )
 
 app = FastAPI()
@@ -81,4 +82,12 @@ def get_latest():
 
     return {
         "latest": data
+    }
+@app.get("/machines/latest")
+def latest_machines():
+
+    data = get_latest_machines()
+
+    return {
+        "machines": data
     }

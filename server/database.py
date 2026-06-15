@@ -119,3 +119,29 @@ def get_latest_system_data():
     connection.close()
 
     return data
+def get_latest_machines():
+
+    connection = sqlite3.connect(
+        DATABASE
+    )
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM system_data
+        WHERE id IN (
+            SELECT MAX(id)
+            FROM system_data
+            GROUP BY machine_name
+        )
+        ORDER BY id DESC
+        """
+    )
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data
