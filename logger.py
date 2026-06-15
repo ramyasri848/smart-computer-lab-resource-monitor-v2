@@ -30,7 +30,7 @@ def send_data_to_server(
         requests.post(
             API_URL,
             json=payload,
-            timeout=5
+            timeout=30
         )
 
     except Exception as e:
