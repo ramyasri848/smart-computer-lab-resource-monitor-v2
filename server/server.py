@@ -3,7 +3,8 @@ from pydantic import BaseModel
 
 from server.database import (
     create_database,
-    insert_system_data
+    insert_system_data,
+    get_all_system_data
 )
 
 app = FastAPI()
@@ -61,4 +62,14 @@ def submit_data(
     return {
         "message":
         "Data stored successfully"
+    }
+
+
+@app.get("/machines")
+def get_machines():
+
+    data = get_all_system_data()
+
+    return {
+        "machines": data
     }

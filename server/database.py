@@ -74,3 +74,26 @@ def insert_system_data(
     connection.commit()
 
     connection.close()
+
+
+def get_all_system_data():
+
+    connection = sqlite3.connect(
+        DATABASE
+    )
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM system_data
+        ORDER BY id DESC
+        """
+    )
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data
