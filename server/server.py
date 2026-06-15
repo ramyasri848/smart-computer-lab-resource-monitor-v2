@@ -6,7 +6,8 @@ from server.database import (
     insert_system_data,
     get_all_system_data,
     get_latest_system_data,
-    get_latest_machines
+    get_latest_machines,
+    get_summary_data
 )
 
 app = FastAPI()
@@ -119,4 +120,15 @@ def latest_machines():
             format_machine(row)
             for row in data
         ]
+    }
+@app.get("/summary")
+def summary():
+
+    data = get_summary_data()
+
+    return {
+        "total_machines": data[0],
+        "average_cpu_usage": round(data[1], 2) if data[1] else 0,
+        "average_ram_usage": round(data[2], 2) if data[2] else 0,
+        "average_disk_usage": round(data[3], 2) if data[3] else 0
     }

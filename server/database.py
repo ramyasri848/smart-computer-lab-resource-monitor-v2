@@ -145,3 +145,27 @@ def get_latest_machines():
     connection.close()
 
     return data
+def get_summary_data():
+
+    connection = sqlite3.connect(
+        DATABASE
+    )
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            COUNT(DISTINCT machine_name),
+            AVG(cpu_usage),
+            AVG(ram_usage),
+            AVG(disk_usage)
+        FROM system_data
+        """
+    )
+
+    data = cursor.fetchone()
+
+    connection.close()
+
+    return data
