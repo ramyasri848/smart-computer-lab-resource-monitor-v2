@@ -13,6 +13,24 @@ from server.database import (
 app = FastAPI()
 
 
+def get_health_status(
+    cpu_usage,
+    ram_usage
+):
+
+    if cpu_usage >= 90 or ram_usage >= 90:
+
+        return "Critical"
+
+    elif cpu_usage >= 70 or ram_usage >= 70:
+
+        return "Warning"
+
+    else:
+
+        return "Healthy"
+
+
 def format_machine(row):
 
     return {
@@ -22,7 +40,11 @@ def format_machine(row):
         "cpu_usage": row[3],
         "ram_usage": row[4],
         "disk_usage": row[5],
-        "process_count": row[6]
+        "process_count": row[6],
+        "health_status": get_health_status(
+            row[3],
+            row[4]
+        )
     }
 
 
@@ -121,6 +143,8 @@ def latest_machines():
             for row in data
         ]
     }
+
+
 @app.get("/summary")
 def summary():
 
