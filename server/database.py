@@ -169,3 +169,28 @@ def get_summary_data():
     connection.close()
 
     return data
+def get_critical_machines():
+
+    connection = sqlite3.connect(
+        DATABASE
+    )
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM system_data
+        WHERE id IN (
+            SELECT MAX(id)
+            FROM system_data
+            GROUP BY machine_name
+        )
+        """
+    )
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data

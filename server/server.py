@@ -7,7 +7,8 @@ from server.database import (
     get_all_system_data,
     get_latest_system_data,
     get_latest_machines,
-    get_summary_data
+    get_summary_data,
+    get_critical_machines
 )
 
 app = FastAPI()
@@ -155,4 +156,22 @@ def summary():
         "average_cpu_usage": round(data[1], 2) if data[1] else 0,
         "average_ram_usage": round(data[2], 2) if data[2] else 0,
         "average_disk_usage": round(data[3], 2) if data[3] else 0
+    }
+@app.get("/critical")
+def critical_machines():
+
+    data = get_critical_machines()
+
+    critical = []
+
+    for row in data:
+
+        machine = format_machine(row)
+
+        if machine["health_status"] != "Healthy":
+
+            critical.append(machine)
+
+    return {
+        "critical_machines": critical
     }
