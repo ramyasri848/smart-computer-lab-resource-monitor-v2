@@ -8,7 +8,8 @@ from server.database import (
     get_latest_system_data,
     get_latest_machines,
     get_summary_data,
-    get_critical_machines
+    get_critical_machines,
+    get_machine_history
 )
 
 app = FastAPI()
@@ -174,4 +175,19 @@ def critical_machines():
 
     return {
         "critical_machines": critical
+    }
+@app.get("/machine-history/{machine_name}")
+def machine_history(
+    machine_name: str
+):
+
+    data = get_machine_history(
+        machine_name
+    )
+
+    return {
+        "history": [
+            format_machine(row)
+            for row in data
+        ]
     }

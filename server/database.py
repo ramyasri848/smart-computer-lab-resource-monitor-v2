@@ -194,3 +194,27 @@ def get_critical_machines():
     connection.close()
 
     return data
+def get_machine_history(machine_name):
+
+    connection = sqlite3.connect(
+        DATABASE
+    )
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM system_data
+        WHERE machine_name = ?
+        ORDER BY id DESC
+        LIMIT 100
+        """,
+        (machine_name,)
+    )
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data
