@@ -2,8 +2,40 @@ import os
 import pandas as pd
 from datetime import datetime
 import psutil
+import requests
+import socket
 
 from health_score import calculate_health_score
+
+
+API_URL = "https://smart-computer-lab-resource-monitor-v2.onrender.com/submit-data"
+
+
+def send_data_to_server(
+    cpu_usage,
+    ram_usage,
+    disk_usage,
+    process_count
+):
+    try:
+
+        payload = {
+            "machine_name": socket.gethostname(),
+            "cpu_usage": cpu_usage,
+            "ram_usage": ram_usage,
+            "disk_usage": disk_usage,
+            "process_count": process_count
+        }
+
+        requests.post(
+            API_URL,
+            json=payload,
+            timeout=5
+        )
+
+    except Exception as e:
+
+        print("Server Error:", e)
 
 
 def log_system_data():
@@ -17,6 +49,15 @@ def log_system_data():
     ram = psutil.virtual_memory().percent
 
     disk = psutil.disk_usage('/').percent
+
+    process_count = len(psutil.pids())
+
+    send_data_to_server(
+        cpu,
+        ram,
+        disk,
+        process_count
+    )
 
     health = calculate_health_score()
 

@@ -25,6 +25,7 @@ from api_client import (
     get_latest_machines,
     get_critical_machines
 )
+
 def show_live_graphs():
 
     try:
