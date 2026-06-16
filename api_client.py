@@ -1,6 +1,5 @@
 import requests
-
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = "https://smart-computer-lab-resource-monitor-v2.onrender.com/"
 
 
 def get_summary():
