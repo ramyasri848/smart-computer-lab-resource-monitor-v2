@@ -166,7 +166,7 @@ elif menu == "Central Dashboard":
     )
 
     summary = get_summary()
-
+    st.write(summary)
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
