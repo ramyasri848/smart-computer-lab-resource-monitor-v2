@@ -166,7 +166,10 @@ elif menu == "Central Dashboard":
     )
 
     summary = get_summary()
-    st.write(summary)
+    st.write("Summary data received:")
+    st.json(summary)
+
+    st.stop()
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
